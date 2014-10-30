@@ -17,8 +17,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # uncomment to enable the coverage tests to run
-    # 'django_coverage',
 )
 
 MIDDLEWARE_CLASSES = [
@@ -71,22 +69,26 @@ LOGGING = {
 ROOT_URLCONF = 'test_app.urls'
 
 ###################################################
-# django_coverage overrides
-
-# Specify a list of regular expressions of module paths to exclude
-# from the coverage analysis. Examples are ``'tests$'`` and ``'urls$'``.
-# This setting is optional.
-COVERAGE_MODULE_EXCLUDES = [
-    'tests$',
-    'settings$',
-    'urls$',
-    'locale$',
-    'common.views.test',
-    '__init__',
-    'django',
-    'migrations',
-    'request_profiler.admin',
-    'request_profiler.signals',
-]
-# COVERAGE_REPORT_HTML_OUTPUT_DIR = 'coverage/html'
-# COVERAGE_USE_STDOUT = True
+try:
+    import coverage
+    import django_coverage
+    INSTALLED_APPS += ('django_coverage',)
+    # Specify a list of regular expressions of module paths to exclude
+    # from the coverage analysis. Examples are ``'tests$'`` and ``'urls$'``.
+    # This setting is optional.
+    COVERAGE_MODULE_EXCLUDES = [
+        'tests$',
+        'settings$',
+        'urls$',
+        'locale$',
+        'common.views.test',
+        '__init__',
+        'django',
+        'migrations',
+        'request_profiler.admin',
+        'request_profiler.signals',
+    ]
+    COVERAGE_REPORT_HTML_OUTPUT_DIR = 'coverage/html'
+    COVERAGE_USE_STDOUT = True
+except ImportError:
+    print(u"Missing coverage or django-coverage packages.")
